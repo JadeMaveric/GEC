@@ -30,6 +30,47 @@ void print_menu()
     printf("\n");
 }
 
+void delta_date(struct Date A, struct Date B, struct Date * C)
+{
+    enum month {Jan=1, Feb, Mar, April, May, Jun, Jul, Aug, Sept, Oct, Nov, Dec};
+    unsigned short int deltaD, deltaM, deltaY;
+
+    deltaD = 0;
+    if( A.dd < B.dd )
+    {
+        switch( A.mm )
+        {
+        case Jan: case Mar: case May: case Jul: case Aug: case Oct: case Dec:
+            deltaD = 31;
+            break;
+        case Feb:
+            deltaD = 28;
+            break;
+        case April: case Jun: case Sept: case Nov:
+            deltaD = 30;
+            break;
+        default:
+            printf("\nError: Unvalid month %d\n", A.mm);
+        }
+    }
+
+    deltaM = 0;
+    if( A.mm < B.mm )
+    {
+        deltaM = (deltaD == 0) ? 12 : 11;
+    }
+
+    deltaY = 0;
+    if( A.mm < B.mm && deltaM != 0)
+    {
+        deltaY = -1;
+    }
+
+    C->dd = A.dd - B.dd + deltaD;
+    C->mm = A.mm - B.mm + deltaM;
+    C->yyyy = A.yyyy - B.yyyy + deltaY;
+}
+
 void get_employee_data(struct Employee * e)
 {
     printf("Enter Employee Details\n");
@@ -62,8 +103,6 @@ void print_employee_retirement_info(struct Employee * e)
     unsigned short int deltaD, deltaM, deltaY;
     int funds;
 
-    deltaM = (e->DOB.dd > e->DOJ.dd)? 12 : 11;
-    deltaY = (e->DOB.mm > e->DOJ.mm)? 60 : 59;
     if( e->DOB.mm == 2 )
     {
         deltaD = 28;
@@ -77,9 +116,8 @@ void print_employee_retirement_info(struct Employee * e)
         deltaD = (e->DOB.mm%2 ? 31 : 30);
     }
 
-
-    unsigned short int dd = (e->DOB.dd > e->DOJ.dd)?(e->DOB.dd - e->DOJ.dd):(e->DOB.dd - e->DOJ.dd + deltaD);
-    unsigned short int mm = (e->DOB.mm > e->DOJ.mm)?(e->DOB.mm - e->DOJ.mm):(e->DOB.mm - e->DOJ.mm + deltaM);
+    unsigned short int dd = e->DOB.dd - e->DOJ.dd + deltaD;
+    unsigned short int mm = e->DOB.mm - e->DOJ.mm + deltaM;
     unsigned short int yyyy = e->DOB.yyyy - e->DOJ.yyyy + deltaY;
 
     printf("%s retires on %hu-%hu-%hu\n", e->name, e->DOB.dd, e->DOB.mm, e->DOB.yyyy + 60);
@@ -111,9 +149,15 @@ int main()
     today.mm = now.tm_mon + 1;
     today.yyyy = now.tm_year + 1990;
 
+    //Initialise index variables
+    i = 0;
+    eIndex = 0;
+    mIndex = 0;
+
     do
     {
         print_menu();
+        printf(">");
         scanf("%d", &mIndex);
 
         switch(mIndex)
