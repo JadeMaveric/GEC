@@ -1,18 +1,20 @@
 /*Array of Structures*/
 
 #include <stdio.h>
+#include <time.h>
 
 #define NUM_OF_EMPLOYEES 2
+
+struct Date
+{
+    int dd, mm, yyyy;
+}today;
 
 struct Employee
 {
     char name[20];
     unsigned short int age;
-    struct {
-        unsigned short int dd;
-        unsigned short int mm;
-        unsigned short int yyyy;
-    }DOB, DOJ;
+    struct Date DOB, DOJ, DOR;
     int salary;
     float bonus;
 };
@@ -49,6 +51,8 @@ void get_employee_data(struct Employee * e)
 
     printf("Bonus: ");
     scanf("%f", &e->bonus);
+
+    //Figure out date of retirement
 
     printf("\n");
 }
@@ -98,6 +102,14 @@ int main()
 {
     struct Employee e[NUM_OF_EMPLOYEES];
     int i, eIndex, mIndex;
+
+    //Initialise today
+    struct Date today;
+    time_t t = time(NULL);
+    struct tm now = *gmtime(&t);
+    today.dd = now.tm_mday;
+    today.mm = now.tm_mon + 1;
+    today.yyyy = now.tm_year + 1990;
 
     do
     {
