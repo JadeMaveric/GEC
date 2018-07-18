@@ -24,6 +24,7 @@ void print_menu()
     printf("\
  1. Add entry to Employee Database\n\
  2. Display retirement info of employee\n\
+ 3. Display days till birthday\n\
  0. Display this menu\n\
 -1. Quit");
 
@@ -33,31 +34,35 @@ void print_menu()
 void delta_date(struct Date A, struct Date B, struct Date * C)
 {
     enum month {Jan=1, Feb, Mar, April, May, Jun, Jul, Aug, Sept, Oct, Nov, Dec};
-    unsigned short int deltaD, deltaM, deltaY;
+    short int deltaD, deltaM, deltaY;
 
     deltaD = 0;
     if( A.dd < B.dd )
     {
-        switch( A.mm )
+        switch( B.mm )
         {
         case Jan: case Mar: case May: case Jul: case Aug: case Oct: case Dec:
             deltaD = 31;
             break;
         case Feb:
-            deltaD = 28;
+            deltaD = (B.yyyy%4 && !B.yyyy%100 || B.yyyy%400) ? 28 : 29;
             break;
         case April: case Jun: case Sept: case Nov:
             deltaD = 30;
             break;
         default:
-            printf("\nError: Unvalid month %d\n", A.mm);
+            printf("\nError: Unvalid month %d\n", B.mm);
         }
     }
 
     deltaM = 0;
     if( A.mm < B.mm )
     {
-        deltaM = (deltaD == 0) ? 12 : 11;
+        deltaM = 12;
+    }
+    if( deltaD != 0 )
+    {
+        deltaM -= 1;
     }
 
     deltaY = 0;
@@ -94,41 +99,28 @@ void get_employee_data(struct Employee * e)
     scanf("%f", &e->bonus);
 
     //Figure out date of retirement
+    e->DOR = e->DOB;
+    e->DOR.yyyy += 60;
 
     printf("\n");
 }
 
 void print_employee_retirement_info(struct Employee * e)
 {
-    unsigned short int deltaD, deltaM, deltaY;
-    int funds;
+    struct Date C; // temporary Date structure
+    int funds;     // total earnings
 
-    if( e->DOB.mm == 2 )
-    {
-        deltaD = 28;
-    }
-    else if ( e->DOB.mm <= 7 )
-    {
-        deltaD = (e->DOB.mm%2 ? 30 : 31);
-    }
-    else
-    {
-        deltaD = (e->DOB.mm%2 ? 31 : 30);
-    }
-
-    unsigned short int dd = e->DOB.dd - e->DOJ.dd + deltaD;
-    unsigned short int mm = e->DOB.mm - e->DOJ.mm + deltaM;
-    unsigned short int yyyy = e->DOB.yyyy - e->DOJ.yyyy + deltaY;
-
-    printf("%s retires on %hu-%hu-%hu\n", e->name, e->DOB.dd, e->DOB.mm, e->DOB.yyyy + 60);
+    printf("%s retires on %hu-%hu-%hu\n", e->name, e->DOR.dd, e->DOR.mm, e->DOR.yyyy);
     printf("They joined on %hu-%hu-%hu\n", e->DOJ.dd, e->DOJ.mm, e->DOJ.yyyy);
 
-    printf("They will have worked for ");
-    printf( dd == 1 ? "%hu day, " : "%hu days, ", dd );
-    printf( mm == 1 ? "%hu month, " : "%hu months and ", mm );
-    printf( yyyy == 1 ? "%hu year, " : "%hu years\n", yyyy );
+    delta_date(e->DOR, e->DOJ, &C);
 
-    for(int i = 0; i < yyyy; i++)
+    printf("They will have worked for ");
+    printf( C.dd == 1 ? "%hu day, " : "%hu days, ", C.dd );
+    printf( C.mm == 1 ? "%hu month, " : "%hu months and ", C.mm );
+    printf( C.yyyy == 1 ? "%hu year, " : "%hu years\n", C.yyyy );
+
+    for(int i = 0; i < C.yyyy; i++)
         funds = funds + e->bonus * funds;
 
     printf("They will have earned a total of %d", funds);
@@ -136,12 +128,9 @@ void print_employee_retirement_info(struct Employee * e)
     printf("\n");
 }
 
-int main()
+void print_employee_birthday_info(struct Employee * e)
 {
-    struct Employee e[NUM_OF_EMPLOYEES];
-    int i, eIndex, mIndex;
-
-    //Initialise today
+    char birthday_over = 'F';
     struct Date today;
     time_t t = time(NULL);
     struct tm now = *gmtime(&t);
@@ -149,6 +138,40 @@ int main()
     today.mm = now.tm_mon + 1;
     today.yyyy = now.tm_year + 1990;
 
+    struct Date delta_birthday;
+    delta_birthday = e->DOB;
+    delta_birthday.yyyy = today.yyyy;
+    if(e->DOB.mm < today.mm)
+    {
+        birthday_over = 'T';
+        delta_birthday.yyyy++;
+    }
+    else if(e->DOB.mm == today.mm)
+    {
+        birthday_over = (e->DOB.dd < today.dd)?'T':'F';
+        delta_birthday.yyyy++;
+    }
+
+    if(birthday_over == 'T')
+    {
+        delta_date(delta_birthday, today, &delta_birthday);
+    }
+    else
+    {
+        delta_date(today, delta_birthday, &delta_birthday);
+    }
+
+    printf( delta_birthday.dd == 1 ? "%hu day, " : "%hu days, ", delta_birthday.dd );
+    printf( delta_birthday.mm == 1 ? "%hu month, " : "%hu months and ", delta_birthday.mm );
+    printf( delta_birthday.yyyy == 1 ? "%hu year, " : "%hu years", delta_birthday.yyyy );
+    printf( " till their birthday\n\n");
+}
+
+int main()
+{
+    struct Employee e[NUM_OF_EMPLOYEES];
+    int i, eIndex, mIndex;
+    
     //Initialise index variables
     i = 0;
     eIndex = 0;
@@ -156,10 +179,6 @@ int main()
 
     do
     {
-        print_menu();
-        printf(">");
-        scanf("%d", &mIndex);
-
         switch(mIndex)
         {
         case 1:
@@ -171,14 +190,25 @@ int main()
         case 2:
             printf("Enter employee index: ");
             scanf("%d", &eIndex);
-            print_employee_retirement_info(&e[eIndex]);
+            if(eIndex < i)
+                print_employee_retirement_info(&e[eIndex]);
+            else
+                printf("Database error: Record not found\n");
+            break;
+        case 3:
+            printf("Enter employee index: ");
+            scanf("%d", &eIndex);
+            print_employee_birthday_info(&e[eIndex]);
             break;
         case 0:
         default:
             print_menu();
         }
 
-    }while(i != -1);
+        printf(">");
+        scanf("%d", &mIndex);
+
+    }while(mIndex != -1);
 
 //    for(int i = 0; i < NUM_OF_EMPLOYEES; i++)
 //        get_employee_data(&e[i]);
