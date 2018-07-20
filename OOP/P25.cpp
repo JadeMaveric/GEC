@@ -23,15 +23,18 @@ int main()
 
     cout << "Rational 1: ";
     cin  >> r1.nu;
-    //cin.ignore();
+    cin.ignore();
     cin  >> r1.de;
 
     cout << "Rational 2: ";
     cin  >> r2.nu;
-    //cin.ignore();
+    cin.ignore();
     cin  >> r2.de;
 
+    r3 = add( r1, r2 );
     cout << "Sum: " << r3.nu << "/" << r3.de;
+
+    cout << endl;
 
     return 0;
 }
