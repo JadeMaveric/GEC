@@ -1,0 +1,5 @@
+Write a program to store and print rollnumber name age and marks of a student using structures
+Write a program to store rollnumber (starting with number 1), name and age of 5 students and then display the details of students with roll number 2 in a neat format
+Write a program to add 2 distances in inch feet representation using structures. The values of the distance is to be taken from the user
+Write a program to to add, subtract, multiply and divide 2 complex numbers using structures. Implement add, subtract, multiply and divide functions with structure variables in paramenters and return type structure.
+Write a program to input 2 rational numbers and add them using structures 3/5 + 2/3
