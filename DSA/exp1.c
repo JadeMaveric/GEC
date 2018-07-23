@@ -109,11 +109,27 @@ void print_employee_retirement_info(struct Employee * e)
 {
     struct Date C; // temporary Date structure
     int funds;     // total earnings
+    enum month {Jan=1, Feb, Mar, April, May, Jun, Jul, Aug, Sept, Oct, Nov, Dec};
 
     printf("%s retires on %hu-%hu-%hu\n", e->name, e->DOR.dd, e->DOR.mm, e->DOR.yyyy);
     printf("They joined on %hu-%hu-%hu\n", e->DOJ.dd, e->DOJ.mm, e->DOJ.yyyy);
 
     delta_date(e->DOR, e->DOJ, &C);
+
+    switch( C.mm )
+    {
+        case Jan: case Mar: case May: case Jul: case Aug: case Oct: case Dec:
+            C.dd = 31;
+            break;
+        case Feb:
+            C.dd = (C.yyyy%4 && !C.yyyy%100 || C.yyyy%400) ? 28 : 29;
+            break;
+        case April: case Jun: case Sept: case Nov:
+            C.dd = 30;
+            break;
+        default:
+            printf("\nError: Unvalid month %d\n", C.mm);
+    }
 
     printf("They will have worked for ");
     printf( C.dd == 1 ? "%hu day, " : "%hu days, ", C.dd );
@@ -209,12 +225,6 @@ int main()
         scanf("%d", &mIndex);
 
     }while(mIndex != -1);
-
-//    for(int i = 0; i < NUM_OF_EMPLOYEES; i++)
-//        get_employee_data(&e[i]);
-//
-//    for(int i = 0; i < NUM_OF_EMPLOYEES; i++)
-//        print_employee_retirement_day(&e[i]);
 
     return 0;
 }
