@@ -92,11 +92,11 @@ void get_employee_data(struct Employee * e)
     printf("DOJ : ");
     scanf("%hu-%hu-%hu", &e->DOJ.dd, &e->DOJ.mm, &e->DOJ.yyyy);
 
-    printf("Salary: ");
-    scanf("%d", &e->salary);
+    //printf("Salary: ");
+    //scanf("%d", &e->salary);
 
-    printf("Bonus: ");
-    scanf("%f", &e->bonus);
+    //printf("Bonus: ");
+    //scanf("%f", &e->bonus);
 
     //Figure out date of retirement
     e->DOR = e->DOB;
@@ -111,37 +111,37 @@ void print_employee_retirement_info(struct Employee * e)
     int funds;     // total earnings
     enum month {Jan=1, Feb, Mar, April, May, Jun, Jul, Aug, Sept, Oct, Nov, Dec};
 
-    printf("%s retires on %hu-%hu-%hu\n", e->name, e->DOR.dd, e->DOR.mm, e->DOR.yyyy);
-    printf("They joined on %hu-%hu-%hu\n", e->DOJ.dd, e->DOJ.mm, e->DOJ.yyyy);
-
     delta_date(e->DOR, e->DOJ, &C);
 
-    switch( C.mm )
+    switch( e->DOB.mm )
     {
         case Jan: case Mar: case May: case Jul: case Aug: case Oct: case Dec:
-            C.dd = 31;
+            e->DOB.dd = 31;
             break;
         case Feb:
-            C.dd = (C.yyyy%4 && !C.yyyy%100 || C.yyyy%400) ? 28 : 29;
+            e->DOB.dd = (e->DOR.yyyy%4 && !e->DOR.yyyy%100 || e->DOR.yyyy%400) ? 28 : 29;
             break;
         case April: case Jun: case Sept: case Nov:
-            C.dd = 30;
+            e->DOB.dd = 30;
             break;
         default:
-            printf("\nError: Unvalid month %d\n", C.mm);
+            printf("\nError: Unvalid month %d\n", e->DOB.mm);
     }
+
+    printf("%s retires on %hu-%hu-%hu\n", e->name, e->DOB.dd, e->DOR.mm, e->DOR.yyyy);
+    printf("They joined on %hu-%hu-%hu\n", e->DOJ.dd, e->DOJ.mm, e->DOJ.yyyy);
 
     printf("They will have worked for ");
     printf( C.dd == 1 ? "%hu day, " : "%hu days, ", C.dd );
     printf( C.mm == 1 ? "%hu month, " : "%hu months and ", C.mm );
     printf( C.yyyy == 1 ? "%hu year, " : "%hu years\n", C.yyyy );
 
-    for(int i = 0; i < C.yyyy; i++)
+    /* for(int i = 0; i < C.yyyy; i++)
         funds = funds + e->bonus * funds;
 
     printf("They will have earned a total of %d", funds);
 
-    printf("\n");
+    printf("\n"); */
 }
 
 void print_employee_birthday_info(struct Employee * e)
@@ -177,9 +177,9 @@ void print_employee_birthday_info(struct Employee * e)
         delta_date(today, delta_birthday, &delta_birthday);
     }
 
-    printf( delta_birthday.dd == 1 ? "%hu day, " : "%hu days, ", delta_birthday.dd );
-    printf( delta_birthday.mm == 1 ? "%hu month, " : "%hu months and ", delta_birthday.mm );
-    printf( delta_birthday.yyyy == 1 ? "%hu year, " : "%hu years", delta_birthday.yyyy );
+    printf( delta_birthday.dd == 1 ? "%hu day, " : "%hu days and ", delta_birthday.dd );
+    printf( delta_birthday.mm == 1 ? "%hu month, " : "%hu months", delta_birthday.mm );
+    //printf( delta_birthday.yyyy == 1 ? "%hu year, " : "%hu years", delta_birthday.yyyy );
     printf( " till their birthday\n\n");
 }
 
