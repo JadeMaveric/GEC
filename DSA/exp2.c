@@ -1,5 +1,6 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include <stdio.h>  //For I/O functions
+#include <stdlib.h> //For memory management functions
+#include <string.h> //For string compare
 
 /* Dynamic Allocation of Array of students
  * read, write, update data using
@@ -112,14 +113,42 @@ void display( struct Student * S)
 int search( struct Student * S, int length )
 {
     int i, roll;
-
-    printf("Enter Roll No: ");
-    scanf("%d", &roll);
-
-    for(i = 0; i < length; i++)
+    char first[15], middle[15], last[15];
+    
+    printf("Search by:\n1. Full Name\n2. Roll Number\n>");
+    scanf("%d", &i);
+    
+    switch (i)
     {
-        if(S[i].roll == roll)
-            return i;
+        case 1:
+
+            printf("Enter Full Name: ");
+            scanf("%s %s %s", first, middle, last);
+            
+            for(i = 0; i < length; i++)
+            {
+                if(strcmp(S[i].name.last, last) == 0)
+                    if(strcmp(S[i].name.first, first) == 0)
+                        if(strcmp(S[i].name.middle, middle) == 0)
+                            return i;
+            }
+            
+            break;
+        case 2:
+
+            printf("Enter Roll: ");
+            scanf("%d", &roll);
+            
+            for(i = 0; i < length; i++)
+            {
+                if(S[i].roll == roll)
+                    return i;
+            }
+            
+            break;
+        default:
+            printf("ERROR: Invalid Option %d", i);
+            break;
     }
 
     return -2;
@@ -127,7 +156,7 @@ int search( struct Student * S, int length )
 
 int main()
 {
-    int i;
+    int i, sIndex;
     struct Student * student, * temp;
     int no_of_students = 0;
     do
@@ -149,11 +178,11 @@ int main()
             get_data(&student[no_of_students - 1]);
             break;
         case 2:
-            i = search( student, no_of_students);
-            if(i < 0)
+            sIndex = search( student, no_of_students);
+            if(sIndex < 0)
                 printf("Record not found\n");
             else
-                display( &student[i] );
+                display( &student[sIndex] );
             break;
         }
     } while(i != 0);
