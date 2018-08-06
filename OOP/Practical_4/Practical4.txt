@@ -1,0 +1,22 @@
+Program to find length of string
+Display string backwards
+Physically reverse the string
+Substring of a given string
+Concatenate one string to another string
+Number of words in a given string
+To check if the given string is a palindrome or not
+Implement a program for the game tic-tac-toe
+To convert any string to lowercase
+TO convert string to uppercase
+Input a 2 dimensional array with m rows and n columns and perform the following operations
+    a. To input the two dimensional array
+    b. To Display the two dimensional array
+    b. Find the sum of the elements of the 2D array
+    d. Find the sum of the rows of the 2D array
+    e. Find the sum of the columns of the 2D array
+    f. To display the upper half of the matrix
+    g. To display the lower half of the matrix
+    h. Check whether the matrix is symmetric
+    i. Sum the primary and secondary diagonals (if matrix is a square matrix)
+    j. Display the middle column of a 2D array (if the number of columns are odd)
+    k. Display the middle row of the matrix (if the number of rows are odd)
