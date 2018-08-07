@@ -14,6 +14,13 @@
  * - return structure pointer from func
 **/
 
+//Utility function to clear input stream
+void clear()
+{
+    char ch;
+    while( (ch = getchar() == '\n') && (ch != EOF) );
+}
+
 int print_menu()
 {
     int ans;
@@ -92,6 +99,8 @@ struct Student get_data( )
         S.class = 3;
     else
         S.class = 4;
+
+    return S;
 }
 
 void display( struct Student S)
@@ -131,16 +140,16 @@ int search( struct Student * S, int length )
     int i, roll, class;
     char first[15], middle[15], last[15];
     char city[15];
-    
-    printf("Search by:\n1. Full Name\n2. Roll Number\n3. City>");
+
+    printf("Search by:\n1. Full Name\n2. Roll Number\n3. City\n>");
     scanf("%d", &i);
-    
+
     switch (i)
     {
         case 1:
             printf("Enter Full Name: ");
             scanf("%s %s %s", first, middle, last);
-            
+
             for(i = 0; i < length; i++)
             {
                 if(strcmp(S[i].name.last, last) == 0)
@@ -153,7 +162,7 @@ int search( struct Student * S, int length )
         case 2:
             printf("Enter Roll: ");
             scanf("%d", &roll);
-            
+
             for(i = 0; i < length; i++)
             {
                 if(S[i].roll == roll)
@@ -164,7 +173,7 @@ int search( struct Student * S, int length )
         case 3:
             printf("Enter City: ");
             scanf("%s", city);
-            
+
             for(i = 0; i < length; i++)
             {
                 if(strcmp(S[i].addr.city, city) == 0)
@@ -174,7 +183,7 @@ int search( struct Student * S, int length )
             return -404;
         case 4:
             printf("Select Class\n1. Distinction\n2. First Class\n3. Second Class\n4. Fail\n>");
-            scanf("%d\n", &class);
+            scanf("%d", &class);
 
             for(i = 0; i < length; i++)
             {
@@ -191,27 +200,28 @@ int search( struct Student * S, int length )
     return -2;
 }
 
-struct Student * update( struct Student * S )
+void update( struct Student * S )
 {
     char userChoice;
-    struct Student update;
 
-    printf("Updating Data for %s (%d)", S->name.first, S->roll);
+    printf("Updating Data for %s (%d)\n", S->name.first, S->roll);
     printf("Continue? [Y/n]: ");
-    scanf("%c\n", &userChoice);
+    //clear();
+    do {
+        scanf("%c", &userChoice);
+    } while (userChoice == '\n');
 
-    if (userChoice == 'n')
+    if (userChoice != 'n')
     {
         printf("Current record is...\n");
         display( *S );
         printf("Enter updated details...\n");
-        update = get_data();
+        *S = get_data();
         printf("Update Succesfull!\n");
-        return &update;
     }
     else
     {
-        return NULL;
+        return;
     }
 
 }
@@ -219,7 +229,7 @@ struct Student * update( struct Student * S )
 int main()
 {
     int i, sIndex;
-    struct Student * student, * temp;
+    struct Student * student;
     int no_of_students = 0;
     do
     {
@@ -229,14 +239,9 @@ int main()
         {
         case 1:
             if(no_of_students++)
-                realloc( temp, sizeof(struct Student) * no_of_students);
+                student = realloc( student, sizeof(struct Student) * no_of_students);
             else
-                temp = malloc(sizeof(struct Student));
-            for(int j = 0; j < no_of_students - 1; j++)
-            {
-                temp[j] = student[j];
-            }
-            student = temp;
+                student = malloc(sizeof(struct Student));
             student[no_of_students-1] = get_data();
             break;
         case 2:
@@ -250,18 +255,20 @@ int main()
             break;
         case 3:
             sIndex = search( student, no_of_students);
-            if(sIndex < 0)
+            if(sIndex == -404)
+                printf("That search parameter cannot be used to update entries\n");
+            else if(sIndex < 0)
                 printf("Record not found\n");
             else
                 update( &student[sIndex] );
             break;
         case 4:
             printf("Enter Database ID: ");
-            scanf("%d\n", &sIndex);
+            scanf("%d", &sIndex);
             if(sIndex < 0 || sIndex >= no_of_students)
                 printf("Invalid Record\n");
             else
-                student[sIndex] = *update( &student[sIndex] );
+                update( &student[sIndex] );
             break;
         }
     } while(i != 0);
