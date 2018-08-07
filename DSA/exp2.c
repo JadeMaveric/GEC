@@ -200,7 +200,6 @@ void update( struct Student * S )
 
     printf("Updating Data for %s (%d)\n", S->name.first, S->roll);
     printf("Continue? [Y/n]: ");
-    //clear();
     do {
         scanf("%c", &userChoice);
     } while (userChoice == '\n');
