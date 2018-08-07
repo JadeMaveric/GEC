@@ -14,6 +14,12 @@
  * - return structure pointer from func
 **/
 
+void clear()
+{
+    char c;
+    while ((c = getchar()) != '\n' && c != EOF);
+}
+
 int print_menu()
 {
     int ans;
@@ -25,6 +31,7 @@ int print_menu()
 0. Quit\n\
 > ");
     scanf("%d", &ans);
+    clear();
     return ans;
 }
 
@@ -55,30 +62,39 @@ struct Student get_data( )
     S.sem = malloc(2 * sizeof(float));
     printf("Roll No: ");
     scanf("%d", &S.roll);
+    clear();
 
     printf("First Name: ");
     scanf("%s", S.name.first);
+    clear();
 
     printf("Middle Name: ");
     scanf("%s", S.name.middle);
+    clear();
 
     printf("Last Name: ");
     scanf("%s", S.name.last);
+    clear();
 
     printf("Sem 1 Percentage: ");
     scanf("%f", &S.sem[0]);
+    clear();
 
     printf("Sem 2 Percentage: ");
     scanf("%f", &S.sem[1]);
+    clear();
 
     printf("House No: ");
     scanf("%s", S.addr.house);
+    clear();
 
     printf("Street: ");
     scanf("%s", S.addr.street);
+    clear();
 
     printf("City: ");
     scanf("%s", S.addr.city);
+    clear();
 
     printf("\n");
 
@@ -132,15 +148,17 @@ int search( struct Student * S, int length )
     char first[15], middle[15], last[15];
     char city[15];
     
-    printf("Search by:\n1. Full Name\n2. Roll Number\n3. City>");
+    printf("Search by:\n1. Full Name\n2. Roll Number\n3. City\n>");
     scanf("%d", &i);
-    
+    clear();
+
     switch (i)
     {
         case 1:
             printf("Enter Full Name: ");
             scanf("%s %s %s", first, middle, last);
-            
+            clear();
+
             for(i = 0; i < length; i++)
             {
                 if(strcmp(S[i].name.last, last) == 0)
@@ -153,7 +171,8 @@ int search( struct Student * S, int length )
         case 2:
             printf("Enter Roll: ");
             scanf("%d", &roll);
-            
+            clear();
+
             for(i = 0; i < length; i++)
             {
                 if(S[i].roll == roll)
@@ -164,7 +183,8 @@ int search( struct Student * S, int length )
         case 3:
             printf("Enter City: ");
             scanf("%s", city);
-            
+            clear();
+
             for(i = 0; i < length; i++)
             {
                 if(strcmp(S[i].addr.city, city) == 0)
@@ -174,7 +194,8 @@ int search( struct Student * S, int length )
             return -404;
         case 4:
             printf("Select Class\n1. Distinction\n2. First Class\n3. Second Class\n4. Fail\n>");
-            scanf("%d\n", &class);
+            scanf("%d", &class);
+            clear();
 
             for(i = 0; i < length; i++)
             {
@@ -194,20 +215,21 @@ int search( struct Student * S, int length )
 struct Student * update( struct Student * S )
 {
     char userChoice;
-    struct Student update;
+    struct Student * update = malloc(sizeof(struct Student));
 
     printf("Updating Data for %s (%d)", S->name.first, S->roll);
     printf("Continue? [Y/n]: ");
-    scanf("%c\n", &userChoice);
+    scanf("%c", &userChoice);
+    clear();
 
     if (userChoice == 'n')
     {
         printf("Current record is...\n");
         display( *S );
         printf("Enter updated details...\n");
-        update = get_data();
+        *update = get_data();
         printf("Update Succesfull!\n");
-        return &update;
+        return update;
     }
     else
     {
@@ -229,14 +251,9 @@ int main()
         {
         case 1:
             if(no_of_students++)
-                realloc( temp, sizeof(struct Student) * no_of_students);
+                student = realloc( student, sizeof(struct Student) * no_of_students);
             else
-                temp = malloc(sizeof(struct Student));
-            for(int j = 0; j < no_of_students - 1; j++)
-            {
-                temp[j] = student[j];
-            }
-            student = temp;
+                student = malloc(sizeof(struct Student));
             student[no_of_students-1] = get_data();
             break;
         case 2:
@@ -257,7 +274,8 @@ int main()
             break;
         case 4:
             printf("Enter Database ID: ");
-            scanf("%d\n", &sIndex);
+            scanf("%d", &sIndex);
+            clear();
             if(sIndex < 0 || sIndex >= no_of_students)
                 printf("Invalid Record\n");
             else
