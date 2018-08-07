@@ -14,13 +14,6 @@
  * - return structure pointer from func
 **/
 
-//Utility function to clear input stream
-void clear()
-{
-    char ch;
-    while( (ch = getchar() == '\n') && (ch != EOF) );
-}
-
 int print_menu()
 {
     int ans;
@@ -135,13 +128,13 @@ void display( struct Student S)
     printf("\n");
 }
 
-int search( struct Student * S, int length )
+struct Student * search( struct Student * S, int length )
 {
     int i, roll, class;
     char first[15], middle[15], last[15];
     char city[15];
 
-    printf("Search by:\n1. Full Name\n2. Roll Number\n3. City\n>");
+    printf("Search by:\n1. Full Name\n2. Roll Number\n3. City\n4. Merit Class\n>");
     scanf("%d", &i);
 
     switch (i)
@@ -155,7 +148,7 @@ int search( struct Student * S, int length )
                 if(strcmp(S[i].name.last, last) == 0)
                     if(strcmp(S[i].name.first, first) == 0)
                         if(strcmp(S[i].name.middle, middle) == 0)
-                            return i;
+                            return &S[i];
             }
 
             break;
@@ -166,7 +159,7 @@ int search( struct Student * S, int length )
             for(i = 0; i < length; i++)
             {
                 if(S[i].roll == roll)
-                    return i;
+                    return &S[i];
             }
 
             break;
@@ -180,7 +173,7 @@ int search( struct Student * S, int length )
                     display( S[i] );
             }
 
-            return -404;
+            return NULL;
         case 4:
             printf("Select Class\n1. Distinction\n2. First Class\n3. Second Class\n4. Fail\n>");
             scanf("%d", &class);
@@ -191,13 +184,14 @@ int search( struct Student * S, int length )
                     display( S[i] );
             }
 
-            return -404;
+            return NULL;
         default:
             printf("ERROR: Invalid Option %d", i);
             break;
     }
 
-    return -2;
+    printf("Record not found\n");
+    return NULL;
 }
 
 void update( struct Student * S )
@@ -229,7 +223,7 @@ void update( struct Student * S )
 int main()
 {
     int i, sIndex;
-    struct Student * student;
+    struct Student * student, *temp;
     int no_of_students = 0;
     do
     {
@@ -245,22 +239,18 @@ int main()
             student[no_of_students-1] = get_data();
             break;
         case 2:
-            sIndex = search( student, no_of_students);
-            if (sIndex == -404)
+            temp = search( student, no_of_students);
+            if (temp == NULL)
                 ;//do nothing - search function took care of displaying
-            else if(sIndex < 0)
-                printf("Record not found\n");
             else
-                display( student[sIndex] );
+                display( *temp );
             break;
         case 3:
-            sIndex = search( student, no_of_students);
-            if(sIndex == -404)
+            temp = search( student, no_of_students);
+            if(temp == NULL)
                 printf("That search parameter cannot be used to update entries\n");
-            else if(sIndex < 0)
-                printf("Record not found\n");
             else
-                update( &student[sIndex] );
+                update( temp );
             break;
         case 4:
             printf("Enter Database ID: ");
