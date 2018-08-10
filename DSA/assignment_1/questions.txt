@@ -1,0 +1,26 @@
+==> q17.c <==
+// Write a recursive function to input and add n numbers
+
+==> q21.c <==
+// Write a recursive program that finds whether a number is perfect or not
+
+==> q25.c <==
+// Write a recursive function to find if an array is in strict ascending order or not.
+
+==> q29.c <==
+// Write a recursive function to find the qoutient when a positive integer is divided by another positive intiger.
+
+==> q33.c <==
+// Write a recursive function to find Binomial Coefficient - nCk.
+
+==> q37.c <==
+// Write a recursive to reverse a string.
+
+==> q41.c <==
+// Write a recursive program to check if a string is a palindrome while only considering letters (ignoring case)
+
+==> q45.c <==
+// Write a recursive function to print pyramids of numbers
+
+==> q49.c <==
+// Write a recursive function to print alternate nodes of a single linked list
