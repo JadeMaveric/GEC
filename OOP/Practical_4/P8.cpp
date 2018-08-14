@@ -39,7 +39,8 @@ void get_move()
 
     cin.get(input);
     cin.ignore(); // For trailing newline char
-
+    input ^= 32;
+    
     switch (input)
     {
         case 'Q':
