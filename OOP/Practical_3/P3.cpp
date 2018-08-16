@@ -7,10 +7,7 @@
  * Otherwise -> print "Dates are not equal"
  */
 #include <iostream>
-
-using std::cin;
-using std::cout;
-using std::endl;
+using namespace std;
 
 struct Date {
     short int day;
