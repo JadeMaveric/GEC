@@ -16,8 +16,8 @@ void bubble_sort( int * X, int size )
 
                 for(int k = 0; k < j; k++)
                     printf("%d ", X[k]);
-                printf("\033[1;31m%d \033[0m", X[j]);
-                printf("\033[1;32m%d \033[0m", X[j+1]);
+                printf("\033[31m%d \033[0m", X[j]);
+                printf("\033[32m%d \033[0m", X[j+1]);
                 for(int k = j+2; k < size; k++)
                     printf("%d ", X[k]);
                 printf("\n");
