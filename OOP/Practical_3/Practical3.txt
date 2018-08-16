@@ -1,0 +1,18 @@
+--> 1 <--
+Write a structure to store roll number, age (18-25) and address of students (>10)
+Store their info of the students and implement the following functions
+    a. To print the names of all students having age between 20 and 22.
+    b. To print the names of all students having an even roll number
+    c. To display the details of students whose roll number is inputted by the user
+
+--> 2 <--
+Write a structure to store the info name, acc no. & balance of 10 customers.
+Store their info and implement the following functions
+    a. To print names and other details (where balance > 200)
+    b. To add Rs. 100 to balance of all accounts (where balance > 1000). Print new balance
+
+--> 3 <--
+Write a program to compare 2 dates entered by the user.
+Make a structure named <date> to store the elements [day, month, year]
+If the dates are equal -> print "Dates are equal"
+Otherwise -> print "Dates are not equal"
