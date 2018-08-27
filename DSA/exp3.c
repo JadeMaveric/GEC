@@ -122,18 +122,32 @@ int gcd_iterative(int a, int b) {
     return a;
 }
 
+int _lcm(int lcm, int a, int b) {
+    if (lcm%b == 0)
+        return lcm;
+    else
+        return _lcm(lcm+a, a, b);
+}
+
 int lcm_recursive(int a, int b) {
-    if (a==0 && b==0)
+    if (a==0 || b==0)
         return 0;
     else
-        return (a*b)/gcd_recursive(a,b);
+        return _lcm(a, a, b);
 }
 
 int lcm_iterative(int a, int b) {
-    if (a==0 && b==0)
+    if (a==0 || b==0)
         return 0;
-    else
-        return (a*b)/gcd_iterative(a,b);
+    else {
+        int lcm = a;
+
+        while (lcm%b != 0) {
+            lcm += a;
+        }
+        
+        return lcm;
+    }
 }
 
 void towerOfHanoi_recursive(int n, char src, char temp, char dest) {

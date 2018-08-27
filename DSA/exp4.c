@@ -184,7 +184,34 @@ void merge_sort(int * list, int size) {
 
     free(arr_1);
     free(arr_2);
-}    
+}   
+
+int _partition(int * list, int low, int high) {
+    int pivot = 0;
+
+    while (low < high) {
+        for (; list[low] <= list[pivot]; low++);
+        for (; list[high] >= list[pivot]; high--);
+
+        if (low < high) {
+            int temp   = list[high];
+            list[high] = list[low];
+            list[low]  = temp;
+        }
+        else {
+            int temp    = list[high];
+            list[high]  = list[pivot];
+            list[pivot] = temp;
+            return high;
+        }
+    }
+}
+
+void quick_sort(int * list, int size) {
+    int piv = partition(list, 0, size-1);
+    quick_sort(&list[0], piv);
+    quick_sort(&list[piv+1], size-piv-1);
+}
 
 int main(int argc, char ** argv) {
     // if(argc < 3) {
@@ -230,7 +257,7 @@ int main(int argc, char ** argv) {
         printf("\n");
     }
     else if (strcmp(argv[1], "quick") == 0) {
-        
+        quick_sort(list, size);
         for(i=0; i<size; i++)
             printf("%d", list[i]);
         printf("\n");
