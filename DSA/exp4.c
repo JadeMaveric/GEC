@@ -7,29 +7,43 @@
 #define green "\033[32m"
 #define bold  "\033[1m"
 
-void bubble_sort( char * X )
-{
-    int size;
-    for(size = 0; X[size]!='\0'; size++);
+int _str_to_int(char * str) {
+    int num = 0, i;
+    for(i=0; str[i]!='\0'; i++) {
+        num = num * 10;
+        num = num + (int)str[i] - (int)'0';
+    }
+    return num;
+}
 
+void _get_list(char ** arg, int * list, int size) {
+    int i;
+    for(i=0; i<size; i++) {
+        list[i] = _str_to_int(arg[i]);
+        //printf("%s->%d ", arg[i], list[i]);
+    }
+}
+
+void bubble_sort(char ** X, int size)
+{
     int i;
     for(i = 0; i < size; i++)
     {
         int j;
         for(j = 0; j < size - 1; j++)
         {
-            if(X[j] > X[j+1])
+            if(strcmp(X[j], X[j+1]) > 0)
             {
-                X[j]   = X[j] + X[j+1];
-                X[j+1] = X[j] - X[j+1];
-                X[j]   = X[j] - X[j+1];
+                char * temp = X[j+1];
+                X[j+1] = X[j];
+                X[j]   = temp;
 
                 for(int k = 0; k < j; k++)
-                    printf("%c ", X[k]);
-                printf("%s%c%s ", red, X[j], reset);
-                printf("%s%c%s ", green, X[j+1], reset);
+                    printf("%s ", X[k]);
+                printf("%s%s%s ", red, X[j], reset);
+                printf("%s%s%s ", green, X[j+1], reset);
                 for(int k = j+2; k < size; k++)
-                    printf("%c ", X[k]);
+                    printf("%s ", X[k]);
                 printf("\n");
             }
         }
@@ -37,16 +51,13 @@ void bubble_sort( char * X )
     }
 }
 
-void insertion_sort(char *X) {
-    int size;
-    for(size = 0; X[size]!='\0'; size++);
-
+void insertion_sort(char ** X, int size) {
     int i, j;
     for (i=1; i<size; i++) {
         for (j=0; j<size; j++) {
-            if (X[i] < X[j]) {
+            if (strcmp(X[i], X[j]) > 0) {
                 int k;
-                char temp = X[i];
+                char * temp = X[i];
                 
                 //verbose printing
                 for(k=0; k<j; k++)
@@ -69,13 +80,10 @@ void insertion_sort(char *X) {
     }
 }
 
-void selection_sort(char * list)
+void selection_sort(char ** list, int size)
 {
     int i, j;
     int large;
-
-    int size;
-    for(size=0; list[size]!='\0'; size++);
 
     char verbose = 'V';
 
@@ -88,7 +96,7 @@ void selection_sort(char * list)
             printf("Pass %d:\n", i+1);
             for(j=0; j<size; j++)
             {
-                printf("%d ", list[j]);
+                printf("%s ", list[j]);
             }
             printf("\n");
         }
@@ -96,7 +104,7 @@ void selection_sort(char * list)
         for(j=i+1; j<size; j++)
         {
             //Ascending Sort
-            if(list[j] < list[i])
+            if(strcmp(list[j], list[i]) < 0)
             {
                 // Verbose: Output modifications
                 if(verbose == 'V')
@@ -105,19 +113,19 @@ void selection_sort(char * list)
                     for( k=0; k<size; k++)
                     {
                         if( k == i )
-                            printf("\033[1;31m%d \033[0m", list[k]);
+                            printf("\033[1;31m%s \033[0m", list[k]);
                         else if( k == j )
-                            printf("\033[1;32m%d \033[0m", list[k]);
+                            printf("\033[1;32m%s \033[0m", list[k]);
                         else
-                            printf("%d ", list[k]);
+                            printf("%s ", list[k]);
                     }
                     printf("\n");
 
                 }
 
-                list[j]  = list[j] + list[i];
-                list[i]  = list[j] - list[i];
-                list[j]  = list[j] - list[i];
+                char * temp = list[i];
+                list[i]  = list[j];
+                list[j]  = temp;
             }
         }
     }
@@ -208,62 +216,78 @@ int _partition(int * list, int low, int high) {
 }
 
 void quick_sort(int * list, int size) {
-    int piv = partition(list, 0, size-1);
+    int piv = _partition(list, 0, size-1);
     quick_sort(&list[0], piv);
     quick_sort(&list[piv+1], size-piv-1);
 }
 
 int main(int argc, char ** argv) {
-    // if(argc < 3) {
-    //     printf("USAGE: %s sort_type [data]\n", argv[0]);
-    //     return 1;
-    // }
+    if(argc < 3) {
+        printf("USAGE: %s sort_type [data]\n", argv[0]);
+        return 1;
+    }
 
     int * list;
-    int i, size;
-    if(argc < 3) {
-        printf("Enter no of elements: ");
-        scanf("%d", &size);
-        list = malloc(size * sizeof(int));
-        for(i=0; i<size; i++) {
-            printf("Enter element %d: ", i);
-            scanf("%d", &list[i]);
-        }
+    int i, size = argc-2;
+    // if(argc < 3) {
+    //     printf("Enter no of elements: ");
+    //     scanf("%d", &size);
+    //     list = malloc(size * sizeof(int));
+    //     for(i=0; i<size; i++) {
+    //         printf("Enter element %d: ", i);
+    //         scanf("%d", &list[i]);
+    //     }
            
-    }
+    // }
 
     if (strcmp(argv[1], "bubble") == 0) {
-        bubble_sort(argv[2]);
-        printf("\n%s\n", argv[2]);
+        bubble_sort(&argv[2], argc-2);
+        printf("\n");
+        for(i=2; i<argc; i++)
+            printf("%s ", argv[i]);
+        printf("\n");
     }
     else if (strcmp(argv[1], "insertion") == 0) {
-        insertion_sort(argv[2]);
-        printf("\n%s\n", argv[2]);
+        insertion_sort(&argv[2], argc-2);
+        printf("\n");
+        for(i=2; i<argc; i++)
+            printf("%s ", argv[i]);
+        printf("\n");
     }
     else if (strcmp(argv[1], "selection") == 0) {
-        selection_sort(argv[2]);
-        printf("\n%s\n", argv[2]);
+        selection_sort(&argv[2], argc-2);
+        printf("\n");
+        for(i=2; i<argc; i++)
+            printf("%s ", argv[i]);
+        printf("\n");
     }
     else if (strcmp(argv[1], "shell") == 0) {
+        list = malloc(size * sizeof(int));
+        _get_list(&argv[2], list, argc-2);
         shell_sort(list, size);
         for(i=0; i<size; i++)
-            printf("%d", list[i]);
+            printf("%d ", list[i]);
         printf("\n");
     }
     else if (strcmp(argv[1], "merge") == 0) {
+        list = malloc(size * sizeof(int));
+        _get_list(&argv[2], list, argc-2);
         merge_sort(list, size);
         for(i=0; i<size; i++)
-            printf("%d", list[i]);
+            printf("%d ", list[i]);
         printf("\n");
     }
     else if (strcmp(argv[1], "quick") == 0) {
+        list = malloc(size * sizeof(int));
+        _get_list(&argv[2], list, argc-2);
         quick_sort(list, size);
         for(i=0; i<size; i++)
-            printf("%d", list[i]);
+            printf("%d ", list[i]);
         printf("\n");
     }
     else {
-        
+        printf("Invalid Option %s", argv[1]);
     }
+    free(list);
     return 0;
 }
