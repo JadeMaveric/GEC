@@ -251,6 +251,7 @@ int main() {
         }
     }
     else if (i == 2) {
+        retry:
         i = print_menu();
         switch (i) {
             case 1:
@@ -307,6 +308,8 @@ int main() {
                 reverseString_recursive(str, j);
                 printf("%s\n", str);
                 break;
+            default:
+                goto retry;
         }
     }
     

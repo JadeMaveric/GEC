@@ -1,11 +1,19 @@
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
 
 #define reset "\033[0m"
 #define red   "\033[31m"
 #define green "\033[32m"
 #define bold  "\033[1m"
+
+int strcmp(const char *str1, const char *str2) {
+    int i=0, diff=0;
+    while ( (diff==0) && (str1[i]!='\0') && (str2[i]!='\0') ) {
+        diff = str1[i] - str2[i];
+        i++;
+    }
+    return diff;
+}
 
 int _str_to_int(char * str) {
     int num = 0, i;
@@ -37,17 +45,8 @@ void bubble_sort(char ** X, int size)
                 char * temp = X[j+1];
                 X[j+1] = X[j];
                 X[j]   = temp;
-
-                for(int k = 0; k < j; k++)
-                    printf("%s ", X[k]);
-                printf("%s%s%s ", red, X[j], reset);
-                printf("%s%s%s ", green, X[j+1], reset);
-                for(int k = j+2; k < size; k++)
-                    printf("%s ", X[k]);
-                printf("\n");
             }
         }
-        printf("\n");
     }
 }
 
@@ -58,17 +57,6 @@ void insertion_sort(char ** X, int size) {
             if (strcmp(X[i], X[j]) > 0) {
                 int k;
                 char * temp = X[i];
-                
-                //verbose printing
-                for(k=0; k<j; k++)
-                    printf("%c", X[k]);
-                printf("%s", bold);
-                for(k=j; k<i; k++)
-                    printf("%c", X[k]);
-                printf("%s%c%s", green, X[i], reset);
-                for(k=i+1; k<size; k++)
-                    printf("%c", X[k]);
-                printf("\n");
 
                 //insert i
                 for (k=i; k>j; k--) {
@@ -85,44 +73,13 @@ void selection_sort(char ** list, int size)
     int i, j;
     int large;
 
-    char verbose = 'V';
-
     for(i=0; i<size; i++)
     {
-        // Verbose: Output Array
-        if(verbose == 'V')
-        {
-            int j;
-            printf("Pass %d:\n", i+1);
-            for(j=0; j<size; j++)
-            {
-                printf("%s ", list[j]);
-            }
-            printf("\n");
-        }
-
         for(j=i+1; j<size; j++)
         {
             //Ascending Sort
             if(strcmp(list[j], list[i]) < 0)
             {
-                // Verbose: Output modifications
-                if(verbose == 'V')
-                {
-                    int k;
-                    for( k=0; k<size; k++)
-                    {
-                        if( k == i )
-                            printf("\033[1;31m%s \033[0m", list[k]);
-                        else if( k == j )
-                            printf("\033[1;32m%s \033[0m", list[k]);
-                        else
-                            printf("%s ", list[k]);
-                    }
-                    printf("\n");
-
-                }
-
                 char * temp = list[i];
                 list[i]  = list[j];
                 list[j]  = temp;
