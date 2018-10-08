@@ -1,0 +1,14 @@
+Q1. Assume that a bank maintains two kinds of accounts for customers, one called as savings and the other as current account. The savings account provides compund interest and withdrawal facilities but no cheque book facility. The current accouint provides cheque book facility but no interest. Current account holders should also maintain a minimum balance and if the balance falls below this level, a service charge is imposed.
+Create a class account that stores customer name, account number and type of account. From this derive the classes cur_acct and sav_acct to make them more specific to thier requiremnts. Include necessart member functions in order to achive the following tasks:
+(a) Accept deposit from a customer and update the balance.
+(b) Display the balance
+(c) Compute and deposit interest.
+(d) Permit withdrawal and update the balance.
+(e) Check for the minimum balance, impose penalty, necessart , and update the balance.
+Do not use any constructors. Use member functions to initialize the class members.
+
+Q2. Modify the program of Q1 to include constructors for all the three classes
+
+Q3. An educational institution wishes to maintain a database of its employees. THe database is devided into a number of classes whose hierarchical relationships are shown in the figure below. The figure also shows the minimum information required for each class. Specify all the classes and define functions to create the database and retrieve individual information as and when required.
+
+Q4. The database created in Q3 does not include educational information of the staff. It has been decided to add this information to teachers and officers (and not for typists) which will help the management in decision making with regard to training, promotion, etc. Add another data class called education that holds two pieces of educational information, namely, highest qualification in general education and highest professional qualification. This class should be inherited by the class teacher and officer. Modify the program of Q3 to incorporate these additions.

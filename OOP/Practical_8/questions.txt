@@ -1,0 +1,25 @@
+Q1. Discuss the syntax for creating user-defined manipulators. Design a single manipulator to provide the following output specifications for printing float values.
+    (a) 10 columns width
+    (b) Right justified
+    (c) Two digits precision
+    (d) Filling of unused places with *
+    (e) Trailing zeros shown
+
+Q2. Write a program to read a list containing item name, item code, and cost interactively and produce a three column output as shown below.
+    NAME        CODE      COST
+    __________________________
+    Turbo C++   1001    250.95
+    C Primer     905     95.70
+    .....        ...     .....
+    .....        ...     .....
+    .....        ...     .....
+    __________________________
+Note that the name and code are left-justified and the cost is right-justified with a precision of two digits. Trailing zeros are shown.
+
+Q3. Modify the previous program to fill the unused spaces with hyphens.
+
+Q4. Write a program which reads a text from the keyboard and displays the following information on the screen in two columns:
+    (a) Number of lines
+    (b) Number of words
+    (c) Number of characters
+Strings should be left justified and numbers should be right-justified in a suitable field width
