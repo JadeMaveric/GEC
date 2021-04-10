@@ -1,3 +1,13 @@
 .vscode/launch.json
 *.app
 .vscode/settings.json
+
+CraftingInterpreters/
+*.out
+*.exe
+*.yy.c
+
+__pycache__/
+
+Project/
+IP/

@@ -1,0 +1,32 @@
+[
+    {
+        "name": "Principals of Compiler Design",
+        "author": "Aho, Ulman",
+        "publisher": "Narosa Publishing House",
+        "isbn": "81-850-1561-9"
+    },
+    {
+        "name": "Introduction to Data Mining",
+        "author": "Tan, Steinbach, Kumar",
+        "publisher": "Pearson Education",
+        "isbn": "81-317-1472-1"
+    },
+    {
+        "name": "Digital Image Processing",
+        "author": "Pratt",
+        "publisher": "Penguin books",
+        "isbn": "XX-XXX-XXXX-X"
+    },
+    {
+        "name": "Web Technology, A developers perspective",
+        "author": "Gopalan, Akhilandeswari",
+        "publisher": "PHI",
+        "isbn": "81-203-5006-9"
+    },
+    {
+        "name": "Miniing of Massive Datasets",
+        "author": "Berthold, Hand",
+        "publisher": "Cambridge",
+        "isbn": "XX-XXX-XXXX-X"
+    }
+]

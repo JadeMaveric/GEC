@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GEC Library</title>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+<body>
+    <nav>
+        <ul>
+            <li style="float:left">GEC Library - Cart</li>
+            <li id="login-button">Login</li>
+        </ul>
+    </nav>
+    <table id="bookshelf"></table>
+
+    <div class="login modal" id="login-page">
+        <form method="post" class="modal-content">
+            <span class="close" id="login-close">&times;</span><br>
+            <label for="name">Name:</label><br>
+            <input type="text" name="name" id="name"><br>
+            <label for="password">Password:</label><br>
+            <input type="password" name="password" id="password"><br>
+            <label for="email">Email:</label><br>
+            <input type="email" name="email" id="email"><br>
+            <label for="phone">Phone:</label><br>
+            <input type="number" name="phone" id="phone"><br>
+            <input type="button" id="login-submit" value="Submit">
+        </form>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>

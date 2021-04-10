@@ -1,0 +1,285 @@
+Grammar
+
+    0 $accept: line $end
+
+    1 line: assignment ';'
+    2     | exit_command ':'
+    3     | print exp ';'
+    4     | line assignment ';'
+    5     | line print exp ';'
+    6     | line exit_command ';'
+
+    7 assignment: identifier '=' exp
+
+    8 exp: term
+    9    | exp '+' term
+   10    | exp '-' term
+
+   11 term: number
+   12     | identifier
+
+
+Terminals, with rules where they appear
+
+    $end (0) 0
+    '+' (43) 9
+    '-' (45) 10
+    ':' (58) 2
+    ';' (59) 1 3 4 5 6
+    '=' (61) 7
+    error (256)
+    print (258) 3 5
+    exit_command (259) 2 6
+    number <num> (260) 11
+    identifier <id> (261) 7 12
+
+
+Nonterminals, with rules where they appear
+
+    $accept (12)
+        on left: 0
+    line <num> (13)
+        on left: 1 2 3 4 5 6
+        on right: 0 4 5 6
+    assignment <id> (14)
+        on left: 7
+        on right: 1 4
+    exp <num> (15)
+        on left: 8 9 10
+        on right: 3 5 7 9 10
+    term <num> (16)
+        on left: 11 12
+        on right: 8 9 10
+
+
+State 0
+
+    0 $accept: • line $end
+
+    print         shift, and go to state 1
+    exit_command  shift, and go to state 2
+    identifier    shift, and go to state 3
+
+    line        go to state 4
+    assignment  go to state 5
+
+
+State 1
+
+    3 line: print • exp ';'
+
+    number      shift, and go to state 6
+    identifier  shift, and go to state 7
+
+    exp   go to state 8
+    term  go to state 9
+
+
+State 2
+
+    2 line: exit_command • ':'
+
+    ':'  shift, and go to state 10
+
+
+State 3
+
+    7 assignment: identifier • '=' exp
+
+    '='  shift, and go to state 11
+
+
+State 4
+
+    0 $accept: line • $end
+    4 line: line • assignment ';'
+    5     | line • print exp ';'
+    6     | line • exit_command ';'
+
+    $end          shift, and go to state 12
+    print         shift, and go to state 13
+    exit_command  shift, and go to state 14
+    identifier    shift, and go to state 3
+
+    assignment  go to state 15
+
+
+State 5
+
+    1 line: assignment • ';'
+
+    ';'  shift, and go to state 16
+
+
+State 6
+
+   11 term: number •
+
+    $default  reduce using rule 11 (term)
+
+
+State 7
+
+   12 term: identifier •
+
+    $default  reduce using rule 12 (term)
+
+
+State 8
+
+    3 line: print exp • ';'
+    9 exp: exp • '+' term
+   10    | exp • '-' term
+
+    ';'  shift, and go to state 17
+    '+'  shift, and go to state 18
+    '-'  shift, and go to state 19
+
+
+State 9
+
+    8 exp: term •
+
+    $default  reduce using rule 8 (exp)
+
+
+State 10
+
+    2 line: exit_command ':' •
+
+    $default  reduce using rule 2 (line)
+
+
+State 11
+
+    7 assignment: identifier '=' • exp
+
+    number      shift, and go to state 6
+    identifier  shift, and go to state 7
+
+    exp   go to state 20
+    term  go to state 9
+
+
+State 12
+
+    0 $accept: line $end •
+
+    $default  accept
+
+
+State 13
+
+    5 line: line print • exp ';'
+
+    number      shift, and go to state 6
+    identifier  shift, and go to state 7
+
+    exp   go to state 21
+    term  go to state 9
+
+
+State 14
+
+    6 line: line exit_command • ';'
+
+    ';'  shift, and go to state 22
+
+
+State 15
+
+    4 line: line assignment • ';'
+
+    ';'  shift, and go to state 23
+
+
+State 16
+
+    1 line: assignment ';' •
+
+    $default  reduce using rule 1 (line)
+
+
+State 17
+
+    3 line: print exp ';' •
+
+    $default  reduce using rule 3 (line)
+
+
+State 18
+
+    9 exp: exp '+' • term
+
+    number      shift, and go to state 6
+    identifier  shift, and go to state 7
+
+    term  go to state 24
+
+
+State 19
+
+   10 exp: exp '-' • term
+
+    number      shift, and go to state 6
+    identifier  shift, and go to state 7
+
+    term  go to state 25
+
+
+State 20
+
+    7 assignment: identifier '=' exp •
+    9 exp: exp • '+' term
+   10    | exp • '-' term
+
+    '+'  shift, and go to state 18
+    '-'  shift, and go to state 19
+
+    $default  reduce using rule 7 (assignment)
+
+
+State 21
+
+    5 line: line print exp • ';'
+    9 exp: exp • '+' term
+   10    | exp • '-' term
+
+    ';'  shift, and go to state 26
+    '+'  shift, and go to state 18
+    '-'  shift, and go to state 19
+
+
+State 22
+
+    6 line: line exit_command ';' •
+
+    $default  reduce using rule 6 (line)
+
+
+State 23
+
+    4 line: line assignment ';' •
+
+    $default  reduce using rule 4 (line)
+
+
+State 24
+
+    9 exp: exp '+' term •
+
+    $default  reduce using rule 9 (exp)
+
+
+State 25
+
+   10 exp: exp '-' term •
+
+    $default  reduce using rule 10 (exp)
+
+
+State 26
+
+    5 line: line print exp ';' •
+
+    $default  reduce using rule 5 (line)
