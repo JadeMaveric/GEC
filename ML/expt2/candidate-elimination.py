@@ -105,6 +105,12 @@ if len(sys.argv) > 1:
 else:
     dataname = 'data.csv'
 
+if len(sys.argv) > 2:
+    debug = not sys.argv[2] == 'noDebug'
+else:
+    debug = True
+
+
 df = pd.read_csv(dataname, sep='\s+')
 num_features = len(df.columns) - 1
 target = df.columns[-1]
@@ -117,13 +123,16 @@ if df[target].dtype != bool:
 
 S = set([('0',)*num_features])
 G = set([('?',)*num_features])
-set_print(S, 'S')
-set_print(G, 'G')
+
+if debug:
+    set_print(S, 'S')
+    set_print(G, 'G')
         
 attributes = [set(df[column]) for column in df.columns[:-1]]
 
 for i, record in enumerate(df.values):
-    print(f'\nRecord: {record}')
+    if debug:
+        print(f'\nRecord: {record}')
 
     target = record[-1]
     example = record[:-1]
@@ -153,12 +162,14 @@ for i, record in enumerate(df.values):
                 G = G.union(t)
             for seen_example in df.values[:i+1]:
                 G = prune(G, seen_example)
-
-    set_print(S, 'S')
-    set_print(G, 'G')
+    
+    if debug:
+        set_print(S, 'S')
+        set_print(G, 'G')
     if len(G) == 0:
-        print("Inconsistent Data!")
+        print("Null hypothesis G, inconsistent Data!")
         exit(2)
+
 # Generate New Hypothesis
 final_hypothesis = set([*S, *G])
 for s in S:
