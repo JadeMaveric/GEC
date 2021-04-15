@@ -18,6 +18,7 @@ client_socket.setblocking(False)
 client_socket.send(username_header + username)
 
 while True:
+    #TODO: This is blocking code, it should be moved into it's own thread 
     message = input(f'{client_username} > ')
     
     if message:
