@@ -6,8 +6,8 @@ import tty
 import termios
 
 HEADER_LENGTH = 10
-IP = 'localhost'
-PORT = 42069
+IP = input("Server addr: ").strip()
+PORT = int(input("Server port: ").strip())
 
 def userInputPresent():
     return select.select([sys.stdin], [], [], 0) == ([sys.stdin], [], [])
@@ -22,7 +22,8 @@ try:
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client_socket.connect((IP, PORT))
     client_socket.setblocking(False)
-
+    
+    print("Connected to server!")
     client_socket.send(username_header + username)
 
     while True:

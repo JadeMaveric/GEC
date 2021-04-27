@@ -2,7 +2,7 @@ import socket
 import select
 
 HEADER_LENGTH = 10
-IP = 'localhost'
+IP = '0.0.0.0'
 PORT = 42069
 
 
