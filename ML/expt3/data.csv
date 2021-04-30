@@ -1,6 +1,6 @@
-Color,Type,Doors,Tyres,Class
-Green,Car,4,Whitewall,True
-Green,Minivan,4,Blackwall,False
-Blue,Car,2,Whitewall,False
-Blue,SUV,4,Whitewall,False
-Red,SUV,2,Blackwall,True
+Color   Type     Doors  Tyres        Class
+Green   Car      4      Whitewall    True
+Green   Minivan  4      Blackwall    False
+Blue    Car      2      Whitewall    False
+Blue    SUV      4      Whitewall    False
+Red     SUV      2      Blackwall    True
