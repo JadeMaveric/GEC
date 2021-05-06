@@ -3,6 +3,7 @@ import pandas as pd
 from anytree import Node, RenderTree
 import graphviz
 from anytree.exporter import UniqueDotExporter
+from math import log2
 
 st.set_page_config( layout='wide' )
 
@@ -16,6 +17,80 @@ def format_data(dataset):
         lambda x: True if x in ('Positive', 'Yes', True) else False
     )
     return df
+
+
+def info_gain(data, attr):
+    if not attr in data.columns:
+        raise ValueError(f"{attr} not found in {data.columns}")
+
+    target = data.columns[-1]
+    counts = {
+        value: {
+            True: sum((data[attr] == value) & (data[target] == True)),
+            False: sum((data[attr] == value) & (data[target] == False)),
+        } for value in sorted(data[attr].unique())
+    }
+
+    counts_df = pd.DataFrame(counts)
+
+    data_true_ratio = sum(data[target]==True) / data[target].count()
+    data_false_ratio = sum(data[target]==False) / data[target].count()
+    if data_true_ratio == 0 or data_false_ratio == 0:
+        info_dataset = 0
+    else:
+        info_dataset = -1 * (data_true_ratio*log2(data_true_ratio) + data_false_ratio*log2(data_false_ratio))
+
+    def get_info(value):
+        value_total = value[True] + value[False]
+        value_true_ratio = value[True] / value_total
+        value_false_ratio = value[False] / value_total
+        data_total = data[target].count()
+        if value_true_ratio == 0 or value_false_ratio == 0:
+            return 0
+        else:
+            return -1 * (value_total/data_total) * (value_true_ratio*log2(value_true_ratio) + value_false_ratio*log2(value_false_ratio))
+
+    info_attr = counts_df.apply(get_info)
+    info_gain = info_dataset - sum(info_attr)
+    
+    # Format output
+    counts_df = counts_df.transpose()
+    counts_df['Entropy'] = info_attr
+    return counts_df, info_dataset, sum(info_attr), info_gain
+
+
+def gini_index(data, attr):
+    if not attr in data.columns:
+        raise ValueError(f"{attr} not found in {data.columns}")
+
+    target = data.columns[-1]
+    counts = {
+        value: {
+            True: sum((data[attr] == value) & (data[target] == True)),
+            False: sum((data[attr] == value) & (data[target] == False)),
+        } for value in sorted(data[attr].unique())
+    }
+
+    counts_df = pd.DataFrame(counts)
+
+    data_true_ratio = sum(data[target]==True) / data[target].count()
+    data_false_ratio = sum(data[target]==False) / data[target].count()
+    gini_dataset = 1 - (data_true_ratio)**2 - (data_false_ratio)**2
+
+    def get_gini(value):
+        value_total = value[True] + value[False]
+        value_true_ratio = value[True] / value_total
+        value_false_ratio = value[False] / value_total
+        data_total = data[target].count()
+        return (value_total/data_total) * (1 - (value_true_ratio)**2 - (value_false_ratio)**2)
+
+    gini_attr = counts_df.apply(get_gini)
+    gini_gain = gini_dataset - sum(gini_attr)
+    
+    # Format output
+    counts_df = counts_df.transpose()
+    counts_df['Gini Idx'] = gini_attr
+    return counts_df, gini_dataset, sum(gini_attr), gini_gain
 
 
 def missclassification_error(data, attr):
@@ -50,7 +125,7 @@ def select_splitting_attr(data, display=False):
     loss = []
 
     for attr in sorted(data.columns[:-1]):
-        counts_df, me_data, me_attr, me_gain = missclassification_error(data, attr)
+        counts_df, me_data, me_attr, me_gain = metric_function(data, attr)
         if display:
             with st.beta_expander(attr, True):
                 calc, table = st.beta_columns(2)
@@ -97,16 +172,20 @@ total_count = 0
 labeled_count = 0
 node_count = 0
 rules = {}
+metrics = {'Info Gain': info_gain, 'Missclassification Error': missclassification_error, 'Gini Index': gini_index}
 
 # -------- MAIN -------- #
 dataset = st.sidebar.file_uploader("Choose a file")
 nodes_processed = st.sidebar.progress(0)
 progress_text = st.sidebar.empty()
+metric_selector = st.sidebar.selectbox("Metric", list(metrics.keys()))
 
 if dataset is not None:
     df = format_data(dataset)
     total_count = len(df)
     progress_text.text(f"{labeled_count}/{total_count} datapoints processed")
+
+    metric_function = metrics[metric_selector]
  
     root = build_tree(df, "root")
     node_attr_func = lambda node: f"shape={'box' if node.name in ['True', 'False'] else 'ellipse'}, label={node.name}"
