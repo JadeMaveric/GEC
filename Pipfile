@@ -7,6 +7,12 @@ name = "pypi"
 numpy = "*"
 pandas = "*"
 anytree = "*"
+streamlit = "*"
+sklearn = "*"
+matplotlib = "*"
+graphviz = "*"
+pyqt5-qt = "*"
+pip = "*"
 
 [dev-packages]
 
