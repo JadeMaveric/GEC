@@ -5,7 +5,7 @@ import graphviz
 from anytree.exporter import UniqueDotExporter
 from math import log2
 
-st.set_page_config( layout='wide' )
+st.set_page_config( layout='centered' )
 
 # -------- FUNCTIONS -------- #
 def format_data(dataset):
@@ -124,7 +124,7 @@ def select_splitting_attr(data, display=False):
     
     loss = []
 
-    for attr in sorted(data.columns[:-1]):
+    for attr in data.columns[:-1]:
         counts_df, me_data, me_attr, me_gain = metric_function(data, attr)
         if display:
             with st.beta_expander(attr, True):
@@ -139,7 +139,7 @@ def select_splitting_attr(data, display=False):
 
 
 def build_tree(data, edge_name="", parent=None, path=""):
-    global labeled_count, node_count
+    global labeled_count, total_count, nodes_processed 
     target = data.columns[-1]
     path = f"{path}/{edge_name}"
 
@@ -153,6 +153,18 @@ def build_tree(data, edge_name="", parent=None, path=""):
         labeled_count += len(data)
         nodes_processed.progress(labeled_count / total_count)
         progress_text.text(f"{labeled_count}/{total_count} datapoints processed")
+
+    elif sum(data[target] == True) == 0:
+        node = Node("False", parent=parent, data=data, label=edge_name)
+        labeled_count += len(data)
+        nodes_processed.progress(labeled_count / total_count)
+        progress_text.text(f"{labeled_count}/{total_count} datapoitns processed")
+    
+    elif sum(data[target] == False) == 0:
+        node = Node("True", parent=parent, data=data, label=edge_name)
+        labeled_count += len(data)
+        nodes_processed.progress(labeled_count / total_count)
+        progress_text.text(f"{labeled_count}/{total_count} datapoitns processed")
 
     # Build intermediate node
     else:
