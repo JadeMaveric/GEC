@@ -1,0 +1,5 @@
+Size    Color   Shape    Category
+small   red     circle   positive
+large   red     triangle positive
+small   red     triangle negative
+large   blue    circle   negative
