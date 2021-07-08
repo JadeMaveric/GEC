@@ -27,6 +27,7 @@ if MODE == 'server':
         server_msg = input('>>> ')
         if server_msg == '.exit':
             break
+        client.send(server_msg[:100].encode())
         client_msg = client.recv(100).decode()
         print(client_msg)
 
