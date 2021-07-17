@@ -45,13 +45,18 @@ class WeightedKNN (KNN):
         return np.sqrt(self.euclidean_sq(v1, v2))
 
 
-    def predict(self, X, k=3):
+    def predict(self, X, k=3, task='logistic'):
         self.data['distance'] = self.data.apply(lambda v1: self.distance_metric(v1, X), axis=1)
         self.data['weight'] = 1 / self.data['distance']
         sorted_df = self.data.sort_values('distance').iloc[:k]
-        predicted = {
-            label: sorted_df[sorted_df.target == label]['weight'].sum() / sorted_df['weight'].sum()
-            for label in sorted_df['target'].unique()
-        }
-        max_label = sorted(predicted, key = lambda l: predicted[l], reverse=True)[0]
-        return max_label
+        if task == 'logistic':
+            candidates = {
+                label: sorted_df[sorted_df.target == label]['weight'].sum() / sorted_df['weight'].sum()
+                for label in sorted_df['target'].unique()
+            }
+            predicted = sorted(candidates, key = lambda l: candidates[l], reverse=True)[0]
+        elif task == 'linear':
+            values = sorted_df['target']
+            weights = sorted_df['weight']
+            predicted = sum([v*w for v,w in zip(values, weights)])
+        return predicted
